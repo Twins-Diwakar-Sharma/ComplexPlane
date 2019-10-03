@@ -1,0 +1,4 @@
+0) autofocus after enter
+1) compiler
+2) beizier interpolation
+3) display 'wait' while equation is being compiled. Display 'done' after compiling and autofocus to simulation.
