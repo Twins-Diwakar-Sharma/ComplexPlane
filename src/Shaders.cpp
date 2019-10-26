@@ -33,7 +33,22 @@ void shaders::updateGridShader(std::string* code)
                                 "       vec2 z = (1-i)*start + (i)*end;" +
                                 "       outPos = z; " +
                                 *code +
-                                "       vec2 interpolatedZ = (1-t)*outPos + t*z; " +
+                                "       vec2 start = outPos, finish = z;" +
+                                "       float relativeY = finish.y*start.x - finish.x*start.y;" +
+                                "       float rot = relativeY > 0 ? 1 : -1;" +
+                                "       vec2 interpolatedZ;" +
+                                "       if( relativeY < 0.001 && relativeY > -0.001) " +
+                             //   "if(true)"+
+                                "           interpolatedZ = (1-t)*start + t*finish;" +
+                                "       else{" +
+                                "           vec2 vStart = vec2(-1*rot*start.y, rot*start.x);  vec2 vFinish = vec2(-1*rot*finish.y, rot*finish.x);" +
+                                "           float radii = length(vStart)/length(vFinish);" +
+                                "           normalize(vStart); normalize(vFinish);" +
+                                "           vFinish = radii * vFinish;" +
+                                "           vec2 A = vFinish + vStart + 2*start - 2*finish; " +
+                                "           vec2 B = 3*finish - 3*start - 2*vStart - vFinish;" +
+                                "           interpolatedZ = A*t*t*t + B*t*t + vStart*t + start;"+
+                                "       }" +
                                 "       gl_Position = ortho*vec4(interpolatedZ.x, interpolatedZ.y, 0, 1); " +
                                 "       EmitVertex(); " +
                                 "   }" +
@@ -63,37 +78,6 @@ void shaders::updateGridShader(std::string* code)
                                 "  else " +
                                 "    fragColor = vec4(0.1f,0.7f,0.8f,1); " +
                                 "} " ;
-
-}
-
-void shaders::editCode(std::string* code)
-{
-    int p = code->find("complex");
-    std::vector<int> complex;
-    while(p >=0 )
-    {
-        complex.push_back(p);
-       p = code->find("complex",p+1);
-   }
-    std::string change = "";
-    p=0;
-    if(complex.size() <= 0)
-        return;
-   for(int i=0; i<code->size(); i++)
-    {
-        if(i==complex[p])
-        {
-            change += "vec2";
-            i+=6;
-            p++;
-        }
-        else
-        {
-            change +=  (*code)[i];
-        }
-    }
-
-    *code = change;
 
 }
 

@@ -72,9 +72,13 @@ int Grid::noOfVertices()
 
 void Grid::update()
 {
-    if( t < 1.0f)
+    if( t < 1.0f - delta)
     {
        t += delta;
+    }
+    else
+    {
+        t = 1.0f;
     }
 
 }
@@ -96,5 +100,5 @@ int Grid::getMagnitude()
 
 void Grid::setInterpolation(int points)
 {
-    delta = 1.0f/(float)(points);
+    delta = (float)(1.0/(double)(points));
 }

@@ -11,8 +11,6 @@ namespace shaders
     extern std::string grid_fs;
 
     void updateGridShader(std::string*);
-
-    void editCode(std::string*);
 }
 
 #endif

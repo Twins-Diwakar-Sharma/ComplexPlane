@@ -36,8 +36,8 @@ void Engine::init()
     ortho = 10;
     projection::setOrthogonal(ortho);
 
-    grid = new Grid(10);
-    grid->setInterpolation(20);
+    grid = new Grid(20);
+    grid->setInterpolation(80);
     glClearColor(0.05f,0.05f,0.05f,1);
 
 }
