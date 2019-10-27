@@ -3,13 +3,12 @@
 double Engine::fps = 400.0;
 double Engine::MS_PER_UPDATE = 1000/fps;
 
-Engine::Engine(int width, int height, char* name,std::string &mcode)
+Engine::Engine(int width, int height, char* name)
 {
     this->width = width;
     this->height = height;
     this->title = name;
-    code = &mcode;
-    std::cout << this->code << std::endl;
+    code = new std::string("");
     compiledCode = new std::string();
     startGameThread();
 
@@ -27,7 +26,6 @@ void Engine::init()
 {
 
     window = new frame::Window(width,height,title,"icon.png");
-    std::cout << *code << std::endl;
     shaders::updateGridShader(code);
     renderer = new Renderer();
     renderer->linkCode(shaders::grid_vs,shaders::grid_gs,shaders::grid_fs);
@@ -37,7 +35,7 @@ void Engine::init()
     projection::setOrthogonal(ortho);
 
     grid = new Grid(20);
-    grid->setInterpolation(80);
+    grid->setInterpolation(40);
     glClearColor(0.05f,0.05f,0.05f,1);
 
 }
@@ -82,7 +80,7 @@ void Engine::update()
    grid->update();
     if(pollCode)
     {
-        std::cout << " ----------------- " <<*compiledCode<< std::endl;
+        //std::cout << " ----------------- " <<*compiledCode<< std::endl;
 		delete renderer;
 	    shaders::updateGridShader(compiledCode);
     	renderer = new Renderer();
@@ -145,25 +143,80 @@ void Engine::cmdInput()
 std::string name="notquit";
 	while(name.compare("exit") != 0)
 	{
-		getline(std::cin,name);
-        if(name.compare("!") == 0)
+        getline(std::cin,name);
+        processCommand(name);
+        if(commands[0] == "equation")
         {
-           // pollCode = true;
-            parser.reset(code,zLex);
-            std::cout << "#########" << *code << std::endl;
-            if(parser.parseAndTranslate(compiledCode))
+            if(commands.size() < 2 || commands.size() > 2)
             {
-                pollCode = true;
+                std::cerr << "    Error : Invalid number of arguements " << std::endl;
             }
             else
             {
-                std::cerr<<(*compiledCode)<<std::endl;
+                zLex = commands[1];
+                std::cout << " Enter your equations : " << std::endl;
+                while(true )
+                {
+                    std::cout << "\t" ;
+                    getline(std::cin,name);
+                    if(name.compare("!") == 0)
+                    {
+                        std::cout << " OK " << std::endl;
+                        // pollCode = true;
+                        parser.reset(code,zLex);
+                        //std::cout << "#########" << *code << std::endl;
+                        if(parser.parseAndTranslate(compiledCode))
+                        {
+                            pollCode = true;
+                        }
+                        else
+                        {
+                            //std::cerr<<(*compiledCode)<<std::endl;
+                        }
+                        *code = "";
+                        break;
+                    }
+                    else
+		                (*code) += (name + " $ ");
+                }
             }
-           *code = "";
         }
-        else
-		    (*code) += (name + " $ ");
-    }
+        else if(commands[0] == "line")
+        {
+            if(commands.size() < 3 || commands.size() > 3 )
+                std::cerr << "     Error : Invalid number of arguements " << std::endl;
+            else
+            {
+                // line render shit here
+            }
+        }
+   }
     window->forceClose();
 
+}
+
+void Engine::processCommand(std::string& cmd)
+{
+    commands.clear();
+    bool firstEncounter = false;
+    std::string current;
+    for(int i=0; i<cmd.length(); i++)
+    {
+        if(cmd[i] == ' ' || cmd[i] == '\t')
+        {
+            if(!firstEncounter)
+            {
+                firstEncounter = true;
+                commands.push_back(current);
+                current = "";
+            }
+            continue;
+        }
+        else
+        {
+            firstEncounter = false;
+            current += cmd[i];
+        }
+    }
+    commands.push_back(current);
 }

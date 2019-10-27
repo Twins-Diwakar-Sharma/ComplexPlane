@@ -7,6 +7,7 @@
 #include <thread>
 #include <time.h>
 #include "Parser.h"
+#include <vector>
 
 class Engine
 {
@@ -19,6 +20,7 @@ class Engine
       std::string* code;
       bool pollCode = false;
       bool mousePressStart = false;
+      std::vector<std::string> commands;
 
       void startGameThread();
       void endGameThread();
@@ -29,6 +31,7 @@ class Engine
       void render();
 
 	  void cmdInput();
+      void processCommand(std::string&);
 
       int width, height;
       char* title;
@@ -39,7 +42,7 @@ class Engine
       std::string zLex="c";
       Parser parser;
  public:
-      Engine(int,int,char*,std::string&);
+      Engine(int,int,char*);
       ~Engine();
 
 };
