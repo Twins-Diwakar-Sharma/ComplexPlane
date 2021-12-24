@@ -30,3 +30,9 @@ Here is an example equation, and the transformation which you will see
 ```
 
 ![Complex](https://user-images.githubusercontent.com/47611483/147350158-dece3bba-7af5-49af-9b72-cbf38cb3ba61.gif)
+
+## Controls
+Following keyboard shortcuts works when 'Complex Plane window' is focused
+* Restart the animation by pressing r
+* Zoom in by pressing z
+* Zoom out by pressing shift+z
