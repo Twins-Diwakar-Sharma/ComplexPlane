@@ -20,19 +20,28 @@ equation z
    !
 ```
 
-## Example
-Here is an example equation, and the transformation which you will see
-```
- equation z
-    z = 1/z
-    z = z*10
-    !
-```
-
-![Complex](https://user-images.githubusercontent.com/47611483/147350158-dece3bba-7af5-49af-9b72-cbf38cb3ba61.gif)
-
 ## Controls
 Following keyboard shortcuts works when 'Complex Plane window' is focused
 * Restart the animation by pressing r
 * Zoom in by pressing z
 * Zoom out by pressing shift+z
+
+## Examples
+Here are some example equations with their transformations
+```
+ equation z
+    y = (z*z)/100
+    z = y*z*y
+    !
+```
+![z5](https://user-images.githubusercontent.com/47611483/147382722-fa7b6a7d-f4bc-4b3e-a6ac-b42bac044592.gif)
+
+```
+equation z
+   rot45 = 0.7072 + i0.7072
+   inv = rot45/z
+   z = inv*100
+   !
+```
+![rot45](https://user-images.githubusercontent.com/47611483/147382731-edcd69d9-8fc7-4c7e-b14e-2ce83a773fc3.gif)
+
