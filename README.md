@@ -1,9 +1,45 @@
 # ComplexPlane
-Visualize complex transformation
+ComplexPlane is a compiler, which compiles equations of complex numbers, and displays the resultant transformation in a 2D grid.
 
-## What is it?
-This is a compiler, which compiles equations of complex numbers, and displays the resultant transformation in a 2D grid
 
+## Lexer
+The following represents the DFA ( Deterministic Finite Automaton ) which is used to convert incoming stream of characters into tokens representing complex number, identifier or an operator.
+
+![DFA](https://github.com/Twins-Diwakar-Sharma/ComplexPlane/assets/47611483/567f744c-ce07-469d-8852-a89ed3ab01bd)
+
+## Parser
+The following are the production rules.
+```
+M -> id = X
+X -> -E | E
+E -> E+T | E-T
+T -> T*F | T/F
+F -> id | real | imaginary | (X) 
+```
+After removing left recursion for LL(1) parser
+```
+M -> id = X
+X -> -E | E
+E -> TE"
+E" -> +TE" | -TE" | e
+T -> FT"
+T" -> *FT" | /FT" | e
+F -> id | real | imaginary | (X)
+```
+
+## Predictive Parsing Table
+Since LL(1) grammar was used, the production rules are modified to eliminate left recursion
+| | id | $ | imaginary | real | + | - | * | / | ( | ) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| M | M -> id=X | | | | | | | | | | 
+| X | X -> E | | X -> E | X -> E | | X -> -E | | | X -> E | |
+| E | E -> TE" | | E -> TE" | E -> TE" | | | | | E -> TE" | |
+| E" | | E" -> e | | | E" -> +TE" | E" -> -TE" | | | | E" -> e | 
+| T | T -> FT" | | T -> FT" | T -> FT" | | | | | T -> FT" | |
+| T" | | T" -> e | | | T" -> e | T" -> e | T" -> *FT" | T" -> /FT" | | T" -> e |
+| F | F -> id | | F -> imaginary | F -> real | | | | | F -> (X) | |
+
+    
 ## How to use
 This program currently works on Linux systems only.
 Program will open a seperate 'Complex Plane window' displaying the complex plane.
