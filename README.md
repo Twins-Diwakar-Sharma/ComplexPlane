@@ -5,7 +5,37 @@ ComplexPlane is a compiler, which compiles equations of complex numbers, and dis
 ## Lexer
 The following represents the DFA ( Deterministic Finite Automaton ) which is used to convert incoming stream of characters into tokens representing complex number, identifier or an operator.
 
-![DFA](https://github.com/Twins-Diwakar-Sharma/ComplexPlane/assets/47611483/567f744c-ce07-469d-8852-a89ed3ab01bd)
+```mermaid
+graph LR;
+    0((0))--digit-->1((1))
+    0((0))--Operator-->10(((10)))
+    0((0))--whitespace-->11(((11)))
+    0((0))--i-->5((5))
+    0((0))--alphabet-->9(((9)))
+    
+    1((1))--i-->4(((4)))
+    1((1))--digit-->1((1))
+    1((1))--decimal-->2((2))
+    
+
+    2((2))--digit-->3((3))
+    3((3))--digit-->3((3))
+    3((3))--i-->4(((4)))
+
+    5((5))--digit-->6((6))
+    5((5))--alphabet-->9(((9)))
+
+    6((6))--decimal-->7((7))
+    6((6))--alphabet-->9(((9)))
+    6((6))--digit-->6((6))
+
+    7((7))--digit-->8(((8)))
+
+    8(((8)))--digit-->8(((8)))
+
+    9(((9)))--digit | alphabet | i-->9(((9)))
+    
+```
 
 ## Parser
 The following are the production rules.
